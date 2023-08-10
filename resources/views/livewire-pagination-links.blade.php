@@ -3,9 +3,9 @@
         
         {{-- Prev --}}
         @if($paginator->onFirstPage())
-            <a href="javascript:;"><li class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 disabled"><span>Prev</span></li></a>
+            <li class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 disabled"><span>Prev</span></li>
         @else
-            <li class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><a href="javascript:;" wire:click="previousPage" rel="prev"><span>Prev</span></a></li>
+            <a href="javascript:;" wire:click="previousPage" rel="prev"><li class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"><span>Prev</span></li></a>
         @endif
         
         @foreach($elements as $element)
@@ -27,9 +27,9 @@
         @endforeach
 
         @if($paginator->hasMorePages())
-            <li class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><a href="javascript:;" wire:click="nextPage" rel="next" class="page-link"><span>Next</span></a></li>
+            <a href="javascript:;" wire:click="nextPage" rel="next" class="page-link"><li class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"><span>Next</span></li></a>
         @else
-            <li class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled"><a href="javascript:;" class="page-link"><span>Next</span></a></li>
+            <li class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 disabled"><span>Next</span></li>
         @endif
     </ul>
 @endif

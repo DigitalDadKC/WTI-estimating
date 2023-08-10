@@ -1,8 +1,5 @@
-<div>
-    <div class="flex flex-nowrap mb-3 justify-between p-2">
-        @php
-        @endphp
-        {{$state}}
+<div class="container">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
         <div class="mx-4">
             <label for="pb-filter-cooperative">Cooperative</label>
             <select wire:model="cooperative" name="pb_filter_cooperative" id="pb-filter-cooperative" class="block border rounded w-full p-2">
@@ -11,8 +8,25 @@
                 <option value="omnia">OMNIA</option>
             </select>
         </div>
+        @if($cooperative=='aepa')
+            <div class="mx-4">
+                <label class="" for="pb-filter-pw">PW</label>
+                <select name="pb-filter-pw" id="pb-filter-pw" class="block border rounded w-full p-2" wire:model="pw">
+                    <option value="1">PW</option>
+                    <option value="0">NPW</option>
+                </select>
+            </div>
+        @endif
         <div class="mx-4">
-            <label for="pb-filter-state">Cooperative</label>
+            <label for="pb-filter-linebook">Linebook</label>
+            <select wire:model="linebook" name="pb_filter_linebook" id="pb_filter_linebook" class="block border rounded w-full p-2">
+                <option value="01_01_2023">January 1, 2023</option>
+                <option value="03_01_2022">March 1, 2022</option>
+                <option value="03_01_2021">March 1, 2021</option>
+            </select>
+        </div>
+        <div class="mx-4">
+            <label for="pb-filter-state">State</label>
             <select wire:model="state" name="pb_filter_state" id="pb_filter_state" class="block border rounded w-full p-2">
                 <option value="">Base</option>
                 @foreach($states as $state)
@@ -20,15 +34,6 @@
                 @endforeach
             </select>
         </div>
-        @if($cooperative=='aepa')
-            <div class="mx-4">
-                <label class="" for="pb-filter-pw">PW</label>
-                <select name="pb-filter-pw" id="pb-filter-pw" class="block border rounded w-full p-2" wire:model="pw">
-                    <option value="pw">PW</option>
-                    <option value="npw">NPW</option>
-                </select>
-            </div>
-            @endif
         <div class="mx-4">
             <label for="pb-filter-search">Search</label>
             <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.debounce.350ms="search">
@@ -56,30 +61,34 @@
             {{$lines->links('livewire-pagination-links')}}
         </div>
     @endif
+    <div class="text-center">
+        {{$lines->total()}} lines
+    </div>
+    {{$linebook}}
     <div class="grid grid-flow-col justify-stretch">
-    <table class="table-auto">
-        <thead class="">
-            <tr>
-                <th>Line</th>
-                <th>Description</th>
-                <th class="">UOM</th>
-                <th class="">Price</th>
-                <th class="">Category</th>
-                <th class="">Prepriced</th>
-            </tr>
-        </thead>
-        <tbody id="cooperative-table-body">
-            @foreach($lines as $line)
-                <tr class="odd:bg-gray-100">
-                    <td class="p-2">{{$line->Line}}</td>
-                    <td class="p-2">{{$line->Description}}</td>
-                    <td class="p-2 text-center">{{$line->UOM}}</td>
-                    <td class="p-2 text-center">{{($line->UOM) ? "$" . $line['01_01_2023'] : ''}}</td>
-                    <td class="p-2 text-center">{{($line->UOM) ? $line->Name : ''}}</td>
-                    <td class="p-2 text-center">{{($line->UOM) ? (($line->Prepriced) ? "Yes" : "No") : ''}}</td>
+        <table class="table-auto">
+            <thead class="">
+                <tr>
+                    <th>Line</th>
+                    <th>Description</th>
+                    <th class="">UOM</th>
+                    <th class="">Price</th>
+                    <th class="">Category</th>
+                    {{-- <th class="">Prepriced</th> --}}
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="cooperative-table-body">
+                @foreach($lines as $line)
+                    <tr class="odd:bg-gray-100">
+                        <td class="p-2">{{$line->Line}}</td>
+                        <td class="p-2">{{$line->Description}}</td>
+                        <td class="p-2 text-center">{{$line->UOM}}</td>
+                        <td class="p-2 text-center">{{($line->UOM) ? (($line->fk_UOM == 2 || $line->fk_UOM == 12) ? $line[$line_version]*$multiplier."%" : (($line->fk_UOM==10) ? $line[$line_version]*$multiplier : "$".number_format($line[$line_version]*$multiplier, 2))) : ''}}</td>
+                        <td class="p-2 text-center">{{($line->UOM) ? $line->Name : ''}}</td>
+                        {{-- <td class="p-2 text-center">{{($line->UOM) ? (($line->Prepriced) ? "Yes" : "No") : ''}}</td> --}}
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
