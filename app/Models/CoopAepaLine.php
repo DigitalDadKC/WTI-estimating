@@ -18,10 +18,18 @@ class CoopAepaLine extends Model
                 ->orWhere('coop_aepa_lines.Description', 'like', $term);
         });
     }
-    public function scopeCategory($query, $category)
+    public function scopeCategory($query, $category, $state)
     {
-        if ($category ?? false) {
-            $query->where('fk_category', '=', $category);
+        if ($state != 53) {
+            if ($category ?? false) {
+                $query->where('fk_category', '=', $category)->where('fk_category', '!=', 12);
+            } else {
+                $query->where('fk_category', '!=', 12);
+            }
+        } else {
+            if ($category ?? false) {
+                $query->where('fk_category', '=', $category);
+            }
         }
     }
     public function coopCategories()

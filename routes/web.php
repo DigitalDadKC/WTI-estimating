@@ -29,7 +29,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified', 'role:admin', 'role:estimator'])->name('estimating.')->prefix('estimating')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/references/pricebook', [PricebookController::class, 'index'])->name('pricebook');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth', 'verified', 'role:admin|estimator'])->name('estimating.')->prefix('estimating')->group(function () {
     Route::get('/cooperatives', [CooperativeController::class, 'index'])->name('cooperatives');
     Route::get('/guidelines', [GuidelineController::class, 'index'])->name('guidelines');
 });
@@ -49,13 +56,6 @@ Route::middleware(['auth', 'role:admin'])->name('admin.')->prefix('admin')->grou
     Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
     Route::post('/users/{user}/permissions', [UserController::class, 'givePermission'])->name('users.permissions');
     Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
-});
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/references/pricebook', [PricebookController::class, 'index'])->name('pricebook');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 

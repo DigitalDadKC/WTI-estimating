@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5">
+    <div class="flex flex-wrap mb-3 justify-between p-2">
         <div class="mx-4">
             <label for="pb-filter-cooperative">Cooperative</label>
             <select wire:model="cooperative" name="pb_filter_cooperative" id="pb-filter-cooperative" class="block border rounded w-full p-2">
@@ -20,6 +20,7 @@
         <div class="mx-4">
             <label for="pb-filter-linebook">Linebook</label>
             <select wire:model="linebook" name="pb_filter_linebook" id="pb_filter_linebook" class="block border rounded w-full p-2">
+                <option value="08_15_2023">August 15, 2023</option>
                 <option value="01_01_2023">January 1, 2023</option>
                 <option value="03_01_2022">March 1, 2022</option>
                 <option value="03_01_2021">March 1, 2021</option>
@@ -33,10 +34,6 @@
                     <option value="{{$state->id}}">{{$state->State}}</option>
                 @endforeach
             </select>
-        </div>
-        <div class="mx-4">
-            <label for="pb-filter-search">Search</label>
-            <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.debounce.350ms="search">
         </div>
         <div class="mx-4">
             <label class="" for="pb-filter-perPage">Per Page</label>
@@ -56,6 +53,12 @@
             </select>
         </div>
     </div>
+    <div class="mb-3 px-2">
+        <div class="mx-4">
+            <label for="pb-filter-search">Search</label>
+            <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.live.debounce.350ms="search">
+        </div>
+    </div>
     @if(count($lines))
         <div class="p-6">
             {{$lines->links('livewire-pagination-links')}}
@@ -64,7 +67,6 @@
     <div class="text-center">
         {{$lines->total()}} lines
     </div>
-    {{$linebook}}
     <div class="grid grid-flow-col justify-stretch">
         <table class="table-auto">
             <thead class="">

@@ -34,7 +34,7 @@
                             </div>
                         @endif
                     @else
-                        <div class="block cursor-pointer hover:bg-gray-400 overflow-x-auto whitespace-nowrap border border-emerald-600 rounded-md" wire:click="editGuidelineField({{$index}}, 'guideline') ">
+                        <div class="block cursor-pointer hover:bg-gray-400 rounded-md px-1" wire:click="editGuidelineField({{$index}}, 'guideline') ">
                             {{$guideline['guideline']}}
                         </div>
                     @endif

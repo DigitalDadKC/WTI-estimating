@@ -1,5 +1,5 @@
 <div class="w-96 lg:w-full ">
-    <x-textarea onkeydown="if(event.keyCode ==13) return false;" type="text" class="w-full resize-none" placeholder="Enter Guideline..." wire:model.debounce.50ms="guideline" wire:keydown.enter.debounce.20ms="addGuideline">
+    <x-textarea onkeydown="if(event.keyCode ==13) return false;" type="text" class="w-full resize-none" :rows="4" placeholder="Enter Guideline..." wire:model.debounce.50ms="guideline" wire:keydown.enter.debounce.20ms="addGuideline">
     </x-textarea>
     @error('guideline')
         <p class="text-red-500 mt-2">{{$message}}</p>

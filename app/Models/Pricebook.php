@@ -15,15 +15,15 @@ class Pricebook extends Model
     {
         $term = "%$term%";
         $query->where(function ($query) use ($term) {
-            $query->where('Pricebooks.Name', 'like', $term)
-                ->orWhere('Pricebooks.SKU', 'like', $term);
+            $query->where('pricebooks.Name', 'like', $term)
+                ->orWhere('pricebooks.SKU', 'like', $term);
         });
     }
 
-    public function scopeCategoryFilter($query, $categories = [])
+    public function scopeCategory($query, $category)
     {
-        if ($categories ?? false) {
-            $query->whereIn('fk_category', request('filter-checkbox'));
+        if ($category ?? false) {
+            $query->where('fk_category', '=', $category);
         }
     }
     public function materialUnitSizes()

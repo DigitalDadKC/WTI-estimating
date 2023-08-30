@@ -1,4 +1,51 @@
-@props([
+@props(['name', 'title' => '', 'subtitle' => ''])
+
+<div 
+    x-data="{show: true, name: '{{$name}}'}"
+    x-show="show"
+    x-on:open-modal.window="show = ($event.detail.name === name)"
+    x-on:close-modal.window="show = false"
+    x-on:keydown.escape.window = "show = false"
+    class="fixed inset-0 z-50"
+    x-transition
+    >
+    <div @click="$dispatch('close-modal')" class="fixed inset-0 bg-gray-300 bg-opacity-75"></div>
+    <div class="bg-white rounded m-auto fixed inset-0 max-w-2xl max-h-fit">
+        <a href="#" @click="$dispatch('close-modal')" class="absolute right-5 top-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </a>
+        <div class="py-5 flex items-center justify-center font-bold text-lg">{{$title}}</div>
+        <div class="flex items-center justify-center">{{$subtitle}}</div>
+        <div class="p-4">
+            <div class="p-3 bg-gray-200 rounded-lg">
+                {{$body}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{-- @props(['name', 'title']) --}}
+{{-- <div 
+    x-data="{show: false, name: '{{$name}}'}"
+    x-show="show"
+    x-on:show-modal.window="show = true"
+    x-on:close-modal.window="show = false"
+    x-on:keydown.escape.window = "show = false"
+    class="fixed z-40 inset-0">
+        <div x-on:click="$dispatch('close-modal')" class="fixed inset-0 bg-gray-300 opacity-40"></div>
+        <div class="bg-white rounded m-auto fixed inset-0 max-w-2xl" style="max-height: 500px;">
+            {{$slot}}
+        </div>
+</div> --}}
+
+
+
+{{-- @props([
     'name',
     'show' => false,
     'maxWidth' => '2xl'
@@ -74,4 +121,4 @@ $maxWidth = [
     >
         {{ $slot }}
     </div>
-</div>
+</div> --}}
