@@ -18,12 +18,11 @@
             </div>
         @endif
         <div class="mx-4">
-            <label for="pb-filter-linebook">Linebook</label>
-            <select wire:model="linebook" name="pb_filter_linebook" id="pb_filter_linebook" class="block border rounded w-full p-2">
-                <option value="08_15_2023">August 15, 2023</option>
-                <option value="01_01_2023">January 1, 2023</option>
-                <option value="03_01_2022">March 1, 2022</option>
-                <option value="03_01_2021">March 1, 2021</option>
+            <label for="pb-filter-linebook">Effective Date</label>
+            <select wire:model="effective_date" name="pb_filter_linebook" id="pb_filter_linebook" class="block border rounded w-full p-2">
+                @foreach($effective_dates as $date)
+                    <option value="{{date('m_d_Y',strtotime($date->date))}}" @selected(date('m_d_Y',strtotime($date->date)) == $effective_date)>{{date("F d, Y",strtotime($date->date))}}</option>
+                @endforeach
             </select>
         </div>
         <div class="mx-4">
@@ -59,13 +58,11 @@
             <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.live.debounce.350ms="search">
         </div>
     </div>
-    @if(count($lines))
-        <div class="p-6">
-            {{$lines->links('livewire-pagination-links')}}
-        </div>
-    @endif
+    <div class="p-6">
+        {{$lines->links('livewire-pagination-links')}}
+    </div>
     <div class="text-center">
-        {{$lines->total()}} lines
+        {{$lines->total()}} lines {{$multiplier}}
     </div>
     <div class="grid grid-flow-col justify-stretch">
         <table class="table-auto">
@@ -85,7 +82,7 @@
                         <td class="p-2">{{$line->Line}}</td>
                         <td class="p-2">{{$line->Description}}</td>
                         <td class="p-2 text-center">{{$line->UOM}}</td>
-                        <td class="p-2 text-center">{{($line->UOM) ? (($line->fk_UOM == 2 || $line->fk_UOM == 12) ? $line[$line_version]*$multiplier."%" : (($line->fk_UOM==10) ? $line[$line_version]*$multiplier : "$".number_format($line[$line_version]*$multiplier, 2))) : ''}}</td>
+                        <td class="p-2 text-center">{{($line->UOM) ? (($line->fk_UOM == 2 || $line->fk_UOM == 12) ? $line[$effective_date]."%" : (($line->fk_UOM==10) ? number_format($line[$effective_date], 2) : "$".number_format($line[$effective_date]*$multiplier, 2))) : ''}}</td>
                         <td class="p-2 text-center">{{($line->UOM) ? $line->Name : ''}}</td>
                         {{-- <td class="p-2 text-center">{{($line->UOM) ? (($line->Prepriced) ? "Yes" : "No") : ''}}</td> --}}
                     </tr>

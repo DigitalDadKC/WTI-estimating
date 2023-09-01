@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\CoopEffectiveDate;
 use App\Models\State;
 use Livewire\Component;
 use App\Models\CoopEiLine;
@@ -19,27 +20,45 @@ class Cooperatives extends Component
     public $perPage = 20;
     public $state;
     public $pw = 'pw';
-    public $linebook = '01_01_2023';
+    public $effective_date;
 
     public function render()
     {
-        $lines = $this->get_cooperative_lines($this->cooperative, $this->state);
-        $categories = CoopCategory::where(strtoupper($this->cooperative) . "_order", '!=', null)->cafilter($this->state)->orderBy('AEPA_order')->get();
-        $multiplier = $this->get_multiplier($this->cooperative, $this->state, $this->pw) ?? 1;
-        $line_version = ($this->cooperative == 'ei') ? '08_15_2023' : '01_01_2023';
-        $test = State::where(($this->cooperative == 'aepa') ? 'aepa_npw' : $this->cooperative) ? $this->cooperative : 'not an idiot';
         return view('livewire.cooperatives', [
-            'lines' => $lines,
-            'categories' => $categories,
+            'lines' => $this->get_cooperative_lines($this->cooperative),
+            'categories' => CoopCategory::where(strtoupper($this->cooperative) . "_order", '!=', null)->cafilter($this->state)->orderBy("Name", "ASC")->get(),
             'states' => State::where(($this->cooperative == 'aepa') ? 'aepa_npw' : $this->cooperative, '!=', null)->orderBy('State')->get(),
             'state_multipliers' => State::find($this->state),
-            'multiplier' => $multiplier,
-            'line_version' => $line_version,
-            'test' => $test
+            'multiplier' => $this->get_multiplier($this->cooperative, $this->state, $this->pw) ?? 1,
+            'effective_date' => $this->effective_date,
+            'effective_dates' => CoopEffectiveDate::whereIn('fk_coop', function ($query) {
+                $query->select('id')->from('Cooperatives')->where('Name', strtoupper($this->cooperative));
+            })->orderBy('date', 'DESC')->get()
         ]);
     }
 
+    public function mount()
+    {
+        $this->effective_date = $this->max_effective_date($this->cooperative);
+    }
+
+    public function max_effective_date($coop)
+    {
+        return date(
+            'm_d_Y',
+            strtotime(
+                CoopEffectiveDate::whereIn('fk_coop', function ($query) {
+                    $query->select('id')->from('Cooperatives')->where('Name', strtoupper($this->cooperative));
+                })->max('date')
+            )
+        );
+    }
+
     public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+    public function updatedCategory()
     {
         $this->resetPage();
     }
