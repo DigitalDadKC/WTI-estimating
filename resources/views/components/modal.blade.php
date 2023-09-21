@@ -1,54 +1,9 @@
-@props(['name', 'title' => '', 'subtitle' => ''])
-
-<div 
-    x-data="{show: true, name: '{{$name}}'}"
-    x-show="show"
-    x-on:open-modal.window="show = ($event.detail.name === name)"
-    x-on:close-modal.window="show = false"
-    x-on:keydown.escape.window = "show = false"
-    class="fixed inset-0 z-50"
-    x-transition
-    >
-    <div @click="$dispatch('close-modal')" class="fixed inset-0 bg-gray-300 bg-opacity-75"></div>
-    <div class="bg-white rounded m-auto fixed inset-0 max-w-2xl max-h-fit">
-        <a href="#" @click="$dispatch('close-modal')" class="absolute right-5 top-3">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </a>
-        <div class="py-5 flex items-center justify-center font-bold text-lg">{{$title}}</div>
-        <div class="flex items-center justify-center">{{$subtitle}}</div>
-        <div class="p-4">
-            <div class="p-3 bg-gray-200 rounded-lg">
-                {{$body}}
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-{{-- @props(['name', 'title']) --}}
-{{-- <div 
-    x-data="{show: false, name: '{{$name}}'}"
-    x-show="show"
-    x-on:show-modal.window="show = true"
-    x-on:close-modal.window="show = false"
-    x-on:keydown.escape.window = "show = false"
-    class="fixed z-40 inset-0">
-        <div x-on:click="$dispatch('close-modal')" class="fixed inset-0 bg-gray-300 opacity-40"></div>
-        <div class="bg-white rounded m-auto fixed inset-0 max-w-2xl" style="max-height: 500px;">
-            {{$slot}}
-        </div>
-</div> --}}
-
-
-
-{{-- @props([
+@props([
     'name',
     'show' => false,
-    'maxWidth' => '2xl'
+    'maxWidth' => '2xl',
+    'title' => '',
+    'subtitle' => ''
 ])
 
 @php
@@ -106,12 +61,12 @@ $maxWidth = [
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
     >
-        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
     </div>
 
     <div
         x-show="show"
-        class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth }} sm:mx-auto"
+        class="mb-6 bg-white dark:bg-emerald-600 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full {{ $maxWidth }} sm:mx-auto"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -119,6 +74,10 @@ $maxWidth = [
         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
     >
+        <div x-show="show" class="p-4 text-lg text-center dark:bg-gray-800 dark:text-white sm:mx-auto">
+            <h1 class="text-lg font-bold sm:mx-auto">{{ stripslashes($title) }}</h1>
+            <h2 class="text-sm sm:mx-auto">{!! stripslashes($subtitle) !!}</h2>
+        </div>
         {{ $slot }}
     </div>
-</div> --}}
+</div>

@@ -6,7 +6,7 @@
         @endphp
         <div class="mx-4">
             <label for="pb-filter-cooperative">Cooperative</label>
-            <select wire:model="cooperative" name="pb_filter_cooperative" id="pb-filter-cooperative" class="block border rounded w-full p-2">
+            <select wire:model.live="cooperative" name="pb_filter_cooperative" id="pb-filter-cooperative" class="block border rounded w-full p-2">
                 <option value="0">BOOK</option>
                 <option value="1">AEPA/ESCNJ/CES/CMAS</option>
                 <option value="2">EI/IPHEC</option>
@@ -15,11 +15,11 @@
         </div>
         <div class="mx-4">
             <label for="pb-filter-search">Search</label>
-            <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.debounce.350ms="search">
+            <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.live.debounce.350ms="search">
         </div>
         <div class="mx-4">
             <label for="pb-filter-category">Category</label>
-            <select name="pb-filter-category" id="pb-filter-category" class="block border rounded w-full p-2" wire:model="category">
+            <select name="pb-filter-category" id="pb-filter-category" class="block border rounded w-full p-2" wire:model.live="category">
                 <option value="">All</option>
                 @foreach($categories as $category)
                     <option value="{{$category->id}}">{{$category->Name}}</option>
@@ -28,7 +28,7 @@
         </div>
         <div class="mx-4">
             <label class="" for="pb-filter-perPage">Per Page</label>
-            <select name="" id="pb-filter-perPage" class="block border rounded w-full p-2" wire:model="perPage">
+            <select name="" id="pb-filter-perPage" class="block border rounded w-full p-2" wire:model.live="perPage">
                 <option value="20">20</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
@@ -36,7 +36,7 @@
         </div>
         <div class="mx-4">
             <label for="">Order By</label>
-            <select name="" id="" class="block border rounded w-full p-2" wire:model="orderBy">
+            <select name="" id="" class="block border rounded w-full p-2" wire:model.live="orderBy">
                 <option value="Pricebooks.id">ID</option>
                 <option value="Pricebooks.SKU">SKU</option>
                 <option value="Pricebooks.Name">Description</option>
@@ -46,17 +46,15 @@
         </div>
         <div class="mx-4">
             <label for="">Sort by</label>
-            <select name="" id="" class="block border rounded w-full p-2" wire:model="sortBy">
+            <select name="" id="" class="block border rounded w-full p-2" wire:model.live="sortBy">
                 <option value="asc">ASC</option>
                 <option value="desc">DESC</option>
             </select>
         </div>
     </div>
-    @if(count($materials))
-        <div class="p-6">
-            {{$materials->links('livewire-pagination-links')}}
-        </div>
-    @endif
+    <div class="p-6">
+        {{$materials->links('livewire-pagination-links')}}
+    </div>
     <div class="text-center pb-4">
         {{$materials->total()}} materials
     </div>
@@ -91,9 +89,9 @@
                             </span>
                         </td>
                         <td>{{$material->Name}}</td>
-                        <td class="text-center" x-data>
+                        <td class="text-center">
                             @if($material->materialCategories->id == 29)
-                                <button @click="$wire.viewMaterial({{$material}})" class="px-3 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500" type="button" >
+                                <button wire:click="viewMaterial({{$material}})" class="px-3 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500" type="button" >
                                     {{$material->materialUnitSizes->Unit_Size}}
                                 </button>
                             @else
@@ -108,29 +106,44 @@
                 @endforeach
             </tbody>
         </table>
-        @if($selectedMaterial)
-            <x-modal name="unit-conversion" title="Board-to-Square Conversion" subtitle="{!! $selectedMaterial->Name !!}">
-                @slot('body')
-                    <div x-data="{
-                        init() {
-                            this.sqperpallet = {{$selectedMaterial->SQPerPallet}},
-                            this.sf = {{$selectedMaterial->SF}},
-                            this.squares = 0,
-                            this.sum = ''
-                            }  
+
+        <x-modal 
+            name="unit-conversion"
+            title="Board-to-Square Conversion"
+            subtitle="Name: {{ optional($selectedMaterial)->Name }}<br>SKU: {!! optional($selectedMaterial)->SKU !!}<br>SQ/Pallet: {!!optional($selectedMaterial)->SQPerPallet!!}"
+            focusable>
+            @slot('slot')
+                @if($selectedMaterial)
+                    <div 
+                        x-data="{
+                            init() {
+                                this.boards = '';
+                                this.sqperpallet = {{optional($selectedMaterial)->SQPerPallet}};
+                                this.SF = {{optional($selectedMaterial)->SF}};
+                            },
+                            get pallets() {
+                                return Math.ceil((boards*SF/100)/sqperpallet)
+                            },
+                            get squares() {
+                                return (Math.ceil((boards*SF/100)/sqperpallet)*sqperpallet).toFixed(2)
+                            }
                         }"
-                    x-init="$watch('squares', () => {
-                        sum = !isNaN(sqperpallet) && !isNaN(squares) ? Math.ceil((parseFloat(squares)*parseFloat(sf)/100)/parseFloat(sqperpallet)) : 0
-                    })">
-                        <x-input-label for="sqperpallet">SQ / Pallet</x-input-label>
-                        <x-text-input type="number" x-model="sqperpallet" id="sqperpallet" :disabled="true" />
-                        <x-input-label for="squares">Boards</x-input-label>
-                        <x-text-input  type="number" x-model="squares" @click="$el.select()" id="squares" />
-                        <x-input-label for="sum">Pallets</x-input-label>
-                        <x-text-input type="text" x-model="sum" id="sum" :disabled="true" /> <span x-text="'(' + sum*sqperpallet + ' squares)'"></span>
+                    >
+                    <div class="grid grid-cols-2 p-4 dark:bg-emerald-600">
+                        <div>
+                            <x-input-label class="text-lg">Boards</x-input-label>
+                            <x-text-input type="text" x-model.number="boards" @click="$el.select()" class="text-lg border-black" />
+                        </div>
+                        <div>
+                            <x-input-label class="text-lg">Squares</x-input-label>
+                            <x-text-input x-model.number="squares" :disabled="true" class="text-lg border-black" />
+                            <div>
+                                <span x-text="`${pallets} pallets`"></span>
+                            </div>
+                        </div>
                     </div>
-                @endslot
-            </x-modal>
-        @endif
+                @endif
+            @endslot
+        </x-modal>
     </div>
 </div>

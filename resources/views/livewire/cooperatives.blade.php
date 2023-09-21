@@ -2,7 +2,7 @@
     <div class="flex flex-wrap mb-3 justify-between p-2">
         <div class="mx-4">
             <label for="pb-filter-cooperative">Cooperative</label>
-            <select wire:model="cooperative" name="pb_filter_cooperative" id="pb-filter-cooperative" class="block border rounded w-full p-2">
+            <select wire:model.live="cooperative" name="pb_filter_cooperative" id="pb-filter-cooperative" class="block border rounded w-full p-2">
                 <option value="aepa">AEPA/ESCNJ/CES/CMAS</option>
                 <option value="ei">EI/IPHEC</option>
                 <option value="omnia">OMNIA</option>
@@ -11,7 +11,7 @@
         @if($cooperative=='aepa')
             <div class="mx-4">
                 <label class="" for="pb-filter-pw">PW</label>
-                <select name="pb-filter-pw" id="pb-filter-pw" class="block border rounded w-full p-2" wire:model="pw">
+                <select name="pb-filter-pw" id="pb-filter-pw" class="block border rounded w-full p-2" wire:model.live="pw">
                     <option value="1">PW</option>
                     <option value="0">NPW</option>
                 </select>
@@ -19,7 +19,7 @@
         @endif
         <div class="mx-4">
             <label for="pb-filter-linebook">Effective Date</label>
-            <select wire:model="effective_date" name="pb_filter_linebook" id="pb_filter_linebook" class="block border rounded w-full p-2">
+            <select wire:model.live="effective_date" name="pb_filter_linebook" id="pb_filter_linebook" class="block border rounded w-full p-2">
                 @foreach($effective_dates as $date)
                     <option value="{{date('m_d_Y',strtotime($date->date))}}" @selected(date('m_d_Y',strtotime($date->date)) == $effective_date)>{{date("F d, Y",strtotime($date->date))}}</option>
                 @endforeach
@@ -27,7 +27,7 @@
         </div>
         <div class="mx-4">
             <label for="pb-filter-state">State</label>
-            <select wire:model="state" name="pb_filter_state" id="pb_filter_state" class="block border rounded w-full p-2">
+            <select wire:model.live="state" name="pb_filter_state" id="pb_filter_state" class="block border rounded w-full p-2">
                 <option value="">Base</option>
                 @foreach($states as $state)
                     <option value="{{$state->id}}">{{$state->State}}</option>
@@ -36,7 +36,7 @@
         </div>
         <div class="mx-4">
             <label class="" for="pb-filter-perPage">Per Page</label>
-            <select name="pb-filter-perPage" id="pb-filter-perPage" class="block border rounded w-full p-2" wire:model="perPage">
+            <select name="pb-filter-perPage" id="pb-filter-perPage" class="block border rounded w-full p-2" wire:model.live="perPage">
                 <option value="20">20</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
@@ -44,7 +44,7 @@
         </div>
         <div class="mx-4">
             <label for="pb-filter-category">Category</label>
-            <select name="pb-filter-category" id="pb-filter-category" class="block border rounded w-full p-2" wire:model="category">
+            <select name="pb-filter-category" id="pb-filter-category" class="block border rounded w-full p-2" wire:model.live="category">
                 <option value="">All</option>
                 @foreach($categories as $category)
                     <option value="{{$category->id}}">{{$category->Name}}</option>
@@ -62,7 +62,7 @@
         {{$lines->links('livewire-pagination-links')}}
     </div>
     <div class="text-center">
-        {{$lines->total()}} lines {{$multiplier}}
+        {{$lines->total()}} lines
     </div>
     <div class="grid grid-flow-col justify-stretch">
         <table class="table-auto">

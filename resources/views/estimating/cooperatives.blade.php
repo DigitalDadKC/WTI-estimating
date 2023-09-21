@@ -4,6 +4,6 @@
     </x-slot>
 
     <div class="p-4">
-        @livewire('cooperatives')
+        <livewire:cooperatives />
     </div>
 </x-app-layout>

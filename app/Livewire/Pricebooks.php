@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Pricebook;
@@ -18,16 +18,10 @@ class Pricebooks extends Component
     public $orderBy = 'pricebooks.id';
     public $sortBy = 'asc';
 
-    public function viewMaterial(Pricebook $pricebook)
-    {
-        $this->selectedMaterial = $pricebook;
-        $this->dispatchBrowserEvent('open-modal', ['name' => 'unit-conversion']);
-    }
-
     public function render()
     {
         $pricebook = $this->get_pricebook($this->cooperative);
-        $materials = Pricebook::select('Pricebooks.*')
+        $materials = Pricebook::select('pricebooks.*')
             ->join('material_unit_sizes', 'material_unit_sizes.id', '=', 'pricebooks.fk_unit_size')
             ->join('material_categories', 'material_categories.id', '=', 'pricebooks.fk_category')
             ->where($pricebook['pricebook_status_column'], '!=', 'Obsolete')
@@ -35,13 +29,28 @@ class Pricebooks extends Component
             ->category($this->category)
             ->orderBy($this->orderBy, $this->sortBy)
             ->paginate($this->perPage);
-        $this->resetPage();
         return view('livewire.pricebooks', [
             'materials' => $materials,
             'categories' => MaterialCategory::orderBy('Name')->get(),
             'discount' => $this->get_discount($this->cooperative),
             'pricebook' => $this->get_pricebook($this->cooperative)
         ]);
+    }
+
+    public function viewMaterial(Pricebook $pricebook)
+    {
+        $this->selectedMaterial = $pricebook;
+        $this->selectedMaterial->Name = addslashes($pricebook->Name);
+        $this->dispatch('open-modal', 'unit-conversion');
+    }
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+    public function updatedCategory()
+    {
+        $this->resetPage();
     }
 
     protected function get_discount($coop)

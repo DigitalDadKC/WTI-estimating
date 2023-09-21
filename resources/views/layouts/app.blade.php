@@ -6,9 +6,6 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'WTI Estimating') }}</title>
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
         
         <link rel="icon" href="images/favicon.ico" />
         <link
@@ -18,9 +15,8 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         />
-        <style>
-            [x-cloak] {display: none;}
-        </style>
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
     <body>

@@ -4,6 +4,6 @@
     </x-slot>
 
     <div class="p-4">
-        @livewire('pricebooks')
+        <livewire:pricebooks />
     </div>
 </x-app-layout>

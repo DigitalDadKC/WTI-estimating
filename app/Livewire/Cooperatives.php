@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\CoopEffectiveDate;
 use App\Models\State;
@@ -22,6 +22,11 @@ class Cooperatives extends Component
     public $pw = 'pw';
     public $effective_date;
 
+    // <option value="{{date('m_d_Y',strtotime($date->date))}}" @selected(date('m_d_Y',strtotime($date->date)) == $effective_date)>{{date("F d, Y",strtotime($date->date))}}</option>
+
+
+
+
     public function render()
     {
         return view('livewire.cooperatives', [
@@ -32,17 +37,23 @@ class Cooperatives extends Component
             'multiplier' => $this->get_multiplier($this->cooperative, $this->state, $this->pw) ?? 1,
             'effective_date' => $this->effective_date,
             'effective_dates' => CoopEffectiveDate::whereIn('fk_coop', function ($query) {
-                $query->select('id')->from('Cooperatives')->where('Name', strtoupper($this->cooperative));
-            })->orderBy('date', 'DESC')->get()
+                $query->select('id')->from('cooperatives')->where('Name', strtoupper($this->cooperative));
+            })->orderBy('date', 'DESC')->get(),
+            'test' => now()
         ]);
     }
 
     public function mount()
     {
-        $this->effective_date = $this->max_effective_date($this->cooperative);
+        $this->effective_date = $this->max_effective_date();
     }
 
-    public function max_effective_date($coop)
+    public function updatedCooperative()
+    {
+        $this->effective_date = $this->max_effective_date();
+    }
+
+    public function max_effective_date()
     {
         return date(
             'm_d_Y',
