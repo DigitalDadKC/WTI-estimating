@@ -19,18 +19,6 @@ return new class extends Migration {
             $table->string('OMNIA');
             $table->timestamps();
         });
-
-        Schema::create('cooperatives', function (Blueprint $table) {
-            $table->id();
-            $table->string('Name');
-            $table->string('Contract_No')->nullable();
-            $table->date('Award_Date')->nullable();
-            $table->date('End_Date')->nullable();
-            $table->decimal('Admin_Fee', 3, 2)->nullable();
-            $table->decimal('Discount', 3, 1)->nullable();
-            $table->boolean('Freight_Free');
-            $table->timestamps();
-        });
     }
 
     /**

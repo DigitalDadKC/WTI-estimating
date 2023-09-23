@@ -18,10 +18,12 @@ class DatabaseSeeder extends Seeder
         //     'password' => bcrypt('KSUwildcat#5')
         // ]);
 
-        $this->call(PricebookSeeder::class);
         $this->call(StateSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(AdminSeeder::class);
+        $this->call(PricebookSeeder::class);
+        $this->call(CooperativeSeeder::class);
+        $this->call(GuidelineSeeder::class);
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
