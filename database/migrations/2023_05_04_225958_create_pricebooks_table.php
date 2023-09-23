@@ -49,8 +49,8 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('pricebooks');
-        Schema::dropIfExists('material_status');
-        Schema::dropIfExists('material_category');
-        Schema::dropIfExists('material_unit_size');
+        Schema::dropIfExists('material_statuses');
+        Schema::dropIfExists('material_categories');
+        Schema::dropIfExists('material_unit_sizes');
     }
 };

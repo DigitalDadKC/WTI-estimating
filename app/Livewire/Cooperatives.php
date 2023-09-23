@@ -59,7 +59,7 @@ class Cooperatives extends Component
             'm_d_Y',
             strtotime(
                 CoopEffectiveDate::whereIn('fk_coop', function ($query) {
-                    $query->select('id')->from('Cooperatives')->where('Name', strtoupper($this->cooperative));
+                    $query->select('id')->from('cooperatives')->where('Name', strtoupper($this->cooperative));
                 })->max('date')
             )
         );
