@@ -28,8 +28,5 @@ INSERT INTO `material_categories` (`id`, `Name`, `created_at`, `updated_at`) VAL
 (29, 'US INSULATION', '2023-07-07 02:40:31', '2023-07-07 02:40:31');
 
 ALTER TABLE `material_categories`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `material_categories`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 COMMIT;

@@ -32,4 +32,8 @@ class CoopOmniaLine extends Model
     {
         return $this->belongsTo(UnitOfMeasurement::class, 'fk_UOM', 'id');
     }
+    public function coopEffectiveDates()
+    {
+        return $this->hasMany(CoopEffectiveDate::class, 'fk_coop', 'id');
+    }
 }

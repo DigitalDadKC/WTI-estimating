@@ -19,5 +19,11 @@ class AdminSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('KSUwildcat#5')
         ])->assignRole(['admin', 'estimator']);
+        User::create([
+            'name' => 'John Doe',
+            'email' => 'rgroesbeck@wtiservices.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('KSUwildcat#5')
+        ])->assignRole(['estimator']);
     }
 }

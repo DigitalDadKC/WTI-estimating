@@ -19,15 +19,15 @@
         @endif
         <div class="mx-4">
             <label for="pb-filter-linebook">Effective Date</label>
-            <select wire:model.live="effective_date" name="pb_filter_linebook" id="pb_filter_linebook" class="block border rounded w-full p-2">
+            <select wire:model.live="effective_date_id" name="pb_filter_linebook" id="pb-filter-linebook" class="block border rounded w-full p-2">
                 @foreach($effective_dates as $date)
-                    <option value="{{date('m_d_Y',strtotime($date->date))}}" @selected(date('m_d_Y',strtotime($date->date)) == $effective_date)>{{date("F d, Y",strtotime($date->date))}}</option>
+                    <option value="{{$date->id}}">{{date("F d, Y",strtotime($date->date))}}</option>
                 @endforeach
             </select>
         </div>
         <div class="mx-4">
             <label for="pb-filter-state">State</label>
-            <select wire:model.live="state" name="pb_filter_state" id="pb_filter_state" class="block border rounded w-full p-2">
+            <select wire:model.live="selected_state" name="pb_filter_state" id="pb_filter_state" class="block border rounded w-full p-2">
                 <option value="">Base</option>
                 @foreach($states as $state)
                     <option value="{{$state->id}}">{{$state->State}}</option>
@@ -44,7 +44,7 @@
         </div>
         <div class="mx-4">
             <label for="pb-filter-category">Category</label>
-            <select name="pb-filter-category" id="pb-filter-category" class="block border rounded w-full p-2" wire:model.live="category">
+            <select wire:model.live="category" name="pb-filter-category" id="pb-filter-category" class="block border rounded w-full p-2">
                 <option value="">All</option>
                 @foreach($categories as $category)
                     <option value="{{$category->id}}">{{$category->Name}}</option>
@@ -82,7 +82,7 @@
                         <td class="p-2">{{$line->Line}}</td>
                         <td class="p-2">{{$line->Description}}</td>
                         <td class="p-2 text-center">{{$line->UOM}}</td>
-                        <td class="p-2 text-center">{{($line->UOM) ? (($line->fk_UOM == 2 || $line->fk_UOM == 12) ? $line[$effective_date]."%" : (($line->fk_UOM==10) ? number_format($line[$effective_date], 2) : "$".number_format($line[$effective_date]*$multiplier, 2))) : ''}}</td>
+                        <td class="p-2 text-center">{{($line->UOM) ? (($line->fk_UOM == 2 || $line->fk_UOM == 12) ? $line->$effective_date."%" : (($line->fk_UOM==10) ? number_format($line->$effective_date, 2) : "$".number_format($line->$effective_date*$state_multiplier, 2))) : ''}}</td>
                         <td class="p-2 text-center">{{($line->UOM) ? $line->Name : ''}}</td>
                         {{-- <td class="p-2 text-center">{{($line->UOM) ? (($line->Prepriced) ? "Yes" : "No") : ''}}</td> --}}
                     </tr>

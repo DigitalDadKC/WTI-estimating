@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class GuidelineSeeder extends Seeder
 {
@@ -12,6 +14,13 @@ class GuidelineSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $models = [
+            'Guideline'
+        ];
+        foreach ($models as $model) {
+            $path = 'database/seeders/sql/' . Str::of(strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $model)))->plural() . '.sql';
+            DB::unprepared(file_get_contents($path));
+            $this->command->info($model . ' Model Seeded!');
+        }
     }
 }
