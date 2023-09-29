@@ -1,21 +1,25 @@
 <div class="container">
+    @php
+        $pb_column = $pricebook['pricebook_column'];
+        $pb_status_column = $pricebook['pricebook_status_column'];
+    @endphp
     <div class="flex flex-wrap mb-3 justify-between p-2">
-        @php
-            $pb_column = $pricebook['pricebook_column'];
-            $pb_status_column = $pricebook['pricebook_status_column'];
-        @endphp
         <div class="mx-4">
             <label for="pb-filter-cooperative">Cooperative</label>
             <select wire:model.live="cooperative" name="pb_filter_cooperative" id="pb-filter-cooperative" class="block border rounded w-full p-2">
-                <option value="0">BOOK</option>
-                <option value="1">AEPA/ESCNJ/CES/CMAS</option>
-                <option value="2">EI/IPHEC</option>
-                <option value="3">OMNIA</option>
+                <option value="book">BOOK</option>
+                <option value="aepa">AEPA/ESCNJ/CES/CMAS</option>
+                <option value="ei">EI/IPHEC</option>
+                <option value="omnia">OMNIA</option>
             </select>
         </div>
         <div class="mx-4">
-            <label for="pb-filter-search">Search</label>
-            <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.live.debounce.350ms="search">
+            <label for="pb-filter-pricebook">Effective Date</label>
+            <select wire:model.live="effective_date_id" name="pb_filter_pricebook" id="pb-filter-pricebook" class="block border rounded w-full p-2">
+                @foreach($effective_dates as $date)
+                    <option value="{{$date->id}}">{{date("F d, Y",strtotime($date->date))}}</option>
+                @endforeach
+            </select>
         </div>
         <div class="mx-4">
             <label for="pb-filter-category">Category</label>
@@ -51,6 +55,10 @@
                 <option value="desc">DESC</option>
             </select>
         </div>
+    </div>
+    <div class="mx-4">
+        <label for="pb-filter-search">Search</label>
+        <input type="text" class="block border rounded min-w-full p-2" id="pb-filter-search" wire:model.live.debounce.350ms="search">
     </div>
     <div class="p-6">
         {{$materials->links('livewire-pagination-links')}}
@@ -98,8 +106,13 @@
                                 {{$material->materialUnitSizes->Unit_Size}}
                             @endif
                         </td>
-                        <td>{{($material->$pb_column && ($material->$pb_status_column == 'Active' || $material->$pb_status_column == 'New')) ? "$" . number_format($material->$pb_column * ($discount), 2) : 'QUOTE'}}</td>
-                        <td>{{$material->PB_FY24_1_Status}}</td>
+                        <td>{{($material->$pb_column && ($material->$pb_status_column == 'Active' || $material->$pb_status_column == 'New')) ?
+                                (($material->Discountable) ? 
+                                    "$" . number_format($material->$pb_column * ($discount), 2) :
+                                    "$" . number_format($material->$pb_column, 2)) :
+                                'QUOTE'}}
+                        </td>
+                        <td>{{$material->$pb_status_column}}</td>
                         <td class="p-2 text-center">{{($material->Discountable) ? "Yes" : "No"}}</td>
                         <td class="p-2 text-center">{{$material->materialCategories->Name}}</td>
                     </tr>

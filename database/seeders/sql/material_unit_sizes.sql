@@ -50,8 +50,5 @@ INSERT INTO `material_unit_sizes` (`id`, `Unit_Size`, `created_at`, `updated_at`
 (45, 'PAL', '2023-07-07 02:40:31', '2023-07-07 02:40:31');
 
 ALTER TABLE `material_unit_sizes`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `material_unit_sizes`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 COMMIT;

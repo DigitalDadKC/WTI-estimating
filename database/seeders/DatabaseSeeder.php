@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call(StateSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(AdminSeeder::class);
-        $this->call(PricebookSeeder::class);
         $this->call(CooperativeSeeder::class);
+        $this->call(PricebookSeeder::class);
         $this->call(GuidelineSeeder::class);
 
         // \App\Models\User::factory()->create([

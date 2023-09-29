@@ -13,10 +13,10 @@ return new class extends Migration {
         Schema::create('states', function (Blueprint $table) {
             $table->id();
             $table->string('State');
-            $table->string('AEPA_NPW');
-            $table->string('AEPA_PW');
-            $table->string('EI');
-            $table->string('OMNIA');
+            $table->string('AEPA_NPW')->nullable()->default(NULL);
+            $table->string('AEPA_PW')->nullable()->default(NULL);
+            $table->string('EI')->nullable()->default(NULL);
+            $table->string('OMNIA')->nullable()->default(NULL);
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\CoopCategory;
+use App\Models\CoopEffectiveDate;
 use App\Models\UnitOfMeasurement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,5 +40,9 @@ class CoopAepaLine extends Model
     public function unitOfMeasurements()
     {
         return $this->belongsTo(UnitOfMeasurement::class, 'fk_UOM', 'id');
+    }
+    public function coopEffectiveDates()
+    {
+        return $this->hasMany(CoopEffectiveDate::class, 'fk_coop', 'id');
     }
 }

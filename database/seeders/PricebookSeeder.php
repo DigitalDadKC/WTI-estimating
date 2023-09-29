@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Pricebook;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
-use App\Models\MaterialCategory;
-use App\Models\MaterialUnitSize;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -18,11 +16,13 @@ class PricebookSeeder extends Seeder
     {
         $models = [
             'MaterialCategory',
+            'MaterialStatus',
             'MaterialUnitSize',
-            'Pricebook'
+            'Pricebook',
+            'PricebookEffectiveDate'
         ];
         foreach ($models as $model) {
-            $path = 'database/seeders/sql/' . strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $model)) . '.sql';
+            $path = 'database/seeders/sql/' . Str::of(strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $model)))->plural() . '.sql';
             DB::unprepared(file_get_contents($path));
             $this->command->info($model . ' Model Seeded!');
         }
